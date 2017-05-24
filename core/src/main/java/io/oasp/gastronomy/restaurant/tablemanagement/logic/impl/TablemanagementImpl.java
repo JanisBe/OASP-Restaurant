@@ -1,21 +1,5 @@
 package io.oasp.gastronomy.restaurant.tablemanagement.logic.impl;
 
-import io.oasp.gastronomy.restaurant.general.common.api.constants.PermissionConstants;
-import io.oasp.gastronomy.restaurant.general.common.api.datatype.Role;
-import io.oasp.gastronomy.restaurant.general.common.api.exception.IllegalEntityStateException;
-import io.oasp.gastronomy.restaurant.general.logic.base.AbstractComponentFacade;
-import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.Salesmanagement;
-import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderEto;
-import io.oasp.gastronomy.restaurant.staffmanagement.logic.api.Staffmanagement;
-import io.oasp.gastronomy.restaurant.staffmanagement.logic.api.to.StaffMemberEto;
-import io.oasp.gastronomy.restaurant.tablemanagement.common.api.datatype.TableState;
-import io.oasp.gastronomy.restaurant.tablemanagement.dataaccess.api.TableEntity;
-import io.oasp.gastronomy.restaurant.tablemanagement.dataaccess.api.dao.TableDao;
-import io.oasp.gastronomy.restaurant.tablemanagement.logic.api.Tablemanagement;
-import io.oasp.gastronomy.restaurant.tablemanagement.logic.api.to.TableEto;
-import io.oasp.gastronomy.restaurant.tablemanagement.logic.api.to.TableSearchCriteriaTo;
-import io.oasp.module.jpa.common.api.to.PaginatedListTo;
-
 import java.util.List;
 import java.util.Objects;
 
@@ -27,6 +11,21 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.oasp.gastronomy.restaurant.general.common.api.constants.PermissionConstants;
+import io.oasp.gastronomy.restaurant.general.common.api.datatype.Role;
+import io.oasp.gastronomy.restaurant.general.common.api.exception.IllegalEntityStateException;
+import io.oasp.gastronomy.restaurant.general.logic.base.AbstractComponentFacade;
+import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderEto;
+import io.oasp.gastronomy.restaurant.staffmanagement.logic.api.Staffmanagement;
+import io.oasp.gastronomy.restaurant.staffmanagement.logic.api.to.StaffMemberEto;
+import io.oasp.gastronomy.restaurant.tablemanagement.common.api.datatype.TableState;
+import io.oasp.gastronomy.restaurant.tablemanagement.dataaccess.api.TableEntity;
+import io.oasp.gastronomy.restaurant.tablemanagement.dataaccess.api.dao.TableDao;
+import io.oasp.gastronomy.restaurant.tablemanagement.logic.api.Tablemanagement;
+import io.oasp.gastronomy.restaurant.tablemanagement.logic.api.to.TableEto;
+import io.oasp.gastronomy.restaurant.tablemanagement.logic.api.to.TableSearchCriteriaTo;
+import io.oasp.module.jpa.common.api.to.PaginatedListTo;
 
 /**
  * Implementation of {@link Tablemanagement}.
@@ -42,7 +41,7 @@ public class TablemanagementImpl extends AbstractComponentFacade implements Tabl
   /** @see #getTableDao() */
   private TableDao tableDao;
 
-  private Salesmanagement salesmanagement;
+  // private Salesmanagement salesmanagement;
 
   private Staffmanagement staffmanagement;
 
@@ -138,7 +137,7 @@ public class TablemanagementImpl extends AbstractComponentFacade implements Tabl
     if (table.getState() != TableState.OCCUPIED) {
       return true;
     }
-    OrderEto order = this.salesmanagement.findOpenOrderForTable(table.getId());
+    OrderEto order = new OrderEto(); // this.salesmanagement.findOpenOrderForTable(table.getId());
     // no open order so the table is actually free...
     return order == null;
   }
@@ -160,16 +159,16 @@ public class TablemanagementImpl extends AbstractComponentFacade implements Tabl
     this.tableDao = tableDao;
   }
 
-  /**
-   * Sets the field 'salesManagement'.
-   *
-   * @param salesManagement new value for salesManagement
-   */
-  @Inject
-  public void setSalesmanagement(Salesmanagement salesManagement) {
-
-    this.salesmanagement = salesManagement;
-  }
+  // /**
+  // * Sets the field 'salesManagement'.
+  // *
+  // * @param salesManagement new value for salesManagement
+  // */
+  // @Inject
+  // public void setSalesmanagement(Salesmanagement salesManagement) {
+  //
+  // this.salesmanagement = salesManagement;
+  // }
 
   /**
    * @param staffmanagement the staffmanagement to set

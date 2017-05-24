@@ -9,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.Salesmanagement;
 import io.oasp.gastronomy.restaurant.staffmanagement.logic.api.Staffmanagement;
 import io.oasp.gastronomy.restaurant.tablemanagement.dataaccess.api.TableEntity;
 import io.oasp.gastronomy.restaurant.tablemanagement.dataaccess.api.dao.TableDao;
@@ -35,8 +34,8 @@ public class TablemanagementImplTest extends ModuleTest {
    */
   private TablemanagementImpl tableManagementImpl;
 
-  @Mock
-  private Salesmanagement salesManagement;
+  // @Mock
+  // private Salesmanagement salesManagement;
 
   @Mock
   private Staffmanagement staffManagement;
@@ -55,7 +54,7 @@ public class TablemanagementImplTest extends ModuleTest {
 
     super.doSetUp();
     this.tableManagementImpl = new TablemanagementImpl();
-    this.tableManagementImpl.setSalesmanagement(this.salesManagement);
+    // this.tableManagementImpl.setSalesmanagement(this.salesManagement);
     this.tableManagementImpl.setStaffmanagement(this.staffManagement);
     this.tableManagementImpl.setTableDao(this.tableDao);
     this.tableManagementImpl.setBeanMapper(this.beanMapper);
@@ -69,7 +68,7 @@ public class TablemanagementImplTest extends ModuleTest {
   public void doTearDown() {
 
     super.doTearDown();
-    this.salesManagement = null;
+    // this.salesManagement = null;
     this.staffManagement = null;
     this.beanMapper = null;
     this.tableDao = null;

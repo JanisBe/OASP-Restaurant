@@ -14,13 +14,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import io.oasp.gastronomy.restaurant.SpringBootApp;
 import io.oasp.gastronomy.restaurant.general.common.DbTestHelper;
 import io.oasp.gastronomy.restaurant.general.common.TestUtil;
-import io.oasp.gastronomy.restaurant.general.common.api.builders.OrderEtoBuilder;
-import io.oasp.gastronomy.restaurant.general.common.api.builders.OrderPositionEtoBuilder;
 import io.oasp.gastronomy.restaurant.general.common.api.constants.PermissionConstants;
 import io.oasp.gastronomy.restaurant.general.common.api.exception.IllegalEntityStateException;
-import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.Salesmanagement;
-import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderEto;
-import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderPositionEto;
 import io.oasp.gastronomy.restaurant.tablemanagement.common.api.datatype.TableState;
 import io.oasp.gastronomy.restaurant.tablemanagement.logic.api.Tablemanagement;
 import io.oasp.gastronomy.restaurant.tablemanagement.logic.api.to.TableEto;
@@ -36,8 +31,8 @@ import io.oasp.module.test.common.base.ComponentTest;
 @WebAppConfiguration
 public class TablemanagementTest extends ComponentTest {
 
-  @Inject
-  private Salesmanagement salesmanagement;
+  // @Inject
+  // private Salesmanagement salesmanagement;
 
   @Inject
   private Tablemanagement tablemanagement;
@@ -71,35 +66,35 @@ public class TablemanagementTest extends ComponentTest {
     TestUtil.logout();
   }
 
-  /**
-   * This test method tests if a table is releasable without and with an open order attached to it.
-   */
-  @Test
-  public void testIsTableReleasable() {
-
-    // given
-    // initially table is releasable (despite TableState is OCCUPIED - but there is no open order)
-    Long tableNumber = 101L;
-    Long offerId = 2L;
-    TableEto table = this.tablemanagement.findTable(tableNumber);
-    assertThat(table.getState()).isEqualTo(TableState.OCCUPIED);
-    assertThat(this.tablemanagement.isTableReleasable(table)).isTrue();
-
-    // when
-    // add order with open orderPosition to table
-    OrderEto newOrder = new OrderEtoBuilder().tableId(table.getId()).createNew();
-    OrderEto order = this.salesmanagement.saveOrder(newOrder);
-    long orderId = order.getId();
-    OrderPositionEto newOrderPosition = new OrderPositionEtoBuilder().orderId(orderId).offerId(offerId).createNew();
-    OrderPositionEto orderPosition = this.salesmanagement.saveOrderPosition(newOrderPosition);
-
-    // then
-    // table should be OCCUPIED
-    assertThat(order).isNotNull();
-    assertThat(orderPosition).isNotNull();
-    assertThat(this.tablemanagement.isTableReleasable(table)).isFalse();
-    assertThat(table.getState()).isEqualTo(TableState.OCCUPIED);
-  }
+  // /**
+  // * This test method tests if a table is releasable without and with an open order attached to it.
+  // */
+  // @Test
+  // public void testIsTableReleasable() {
+  //
+  // // given
+  // // initially table is releasable (despite TableState is OCCUPIED - but there is no open order)
+  // Long tableNumber = 101L;
+  // Long offerId = 2L;
+  // TableEto table = this.tablemanagement.findTable(tableNumber);
+  // assertThat(table.getState()).isEqualTo(TableState.OCCUPIED);
+  // assertThat(this.tablemanagement.isTableReleasable(table)).isTrue();
+  //
+  // // when
+  // // add order with open orderPosition to table
+  // OrderEto newOrder = new OrderEtoBuilder().tableId(table.getId()).createNew();
+  // OrderEto order = this.salesmanagement.saveOrder(newOrder);
+  // long orderId = order.getId();
+  // OrderPositionEto newOrderPosition = new OrderPositionEtoBuilder().orderId(orderId).offerId(offerId).createNew();
+  // OrderPositionEto orderPosition = this.salesmanagement.saveOrderPosition(newOrderPosition);
+  //
+  // // then
+  // // table should be OCCUPIED
+  // assertThat(order).isNotNull();
+  // assertThat(orderPosition).isNotNull();
+  // assertThat(this.tablemanagement.isTableReleasable(table)).isFalse();
+  // assertThat(table.getState()).isEqualTo(TableState.OCCUPIED);
+  // }
 
   /**
    * This test method finds all free tables, occupies one of them and checks if the number of free tables is reduced by
