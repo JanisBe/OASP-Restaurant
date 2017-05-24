@@ -2,7 +2,6 @@ package io.oasp.gastronomy.restaurant.salesmanagement.logic.impl.usecase;
 
 import java.util.Objects;
 
-import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -12,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.annotation.Validated;
 
-import io.oasp.gastronomy.restaurant.general.common.api.constants.PermissionConstants;
 import io.oasp.gastronomy.restaurant.general.common.api.exception.IllegalEntityStateException;
 import io.oasp.gastronomy.restaurant.general.common.api.exception.IllegalPropertyChangeException;
 import io.oasp.gastronomy.restaurant.general.logic.api.UseCase;
@@ -56,7 +54,6 @@ public class UcManageOrderPositionImpl extends AbstractOrderPositionUc implement
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.SAVE_ORDER_POSITION)
   public OrderPositionEto createOrderPosition(OfferEto offer, OrderEto order, String comment) {
 
     Objects.requireNonNull(offer, "offer");
@@ -85,7 +82,6 @@ public class UcManageOrderPositionImpl extends AbstractOrderPositionUc implement
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.SAVE_ORDER_POSITION)
   public OrderPositionEto saveOrderPosition(OrderPositionEto orderPosition) {
 
     Objects.requireNonNull(orderPosition, "orderPosition");

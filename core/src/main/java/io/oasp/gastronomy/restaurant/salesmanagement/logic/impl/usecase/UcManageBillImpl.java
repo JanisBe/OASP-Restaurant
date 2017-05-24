@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.oasp.gastronomy.restaurant.general.common.api.constants.PermissionConstants;
 import io.oasp.gastronomy.restaurant.general.common.api.datatype.Money;
 import io.oasp.gastronomy.restaurant.general.common.api.exception.IllegalEntityStateException;
 import io.oasp.gastronomy.restaurant.general.logic.api.UseCase;
@@ -46,7 +44,6 @@ public class UcManageBillImpl extends AbstractBillUc implements UcManageBill {
   private PaymentAdapter paymentAdapter;
 
   @Override
-  @RolesAllowed(PermissionConstants.SAVE_BILL)
   public BillEto createBill(BillEto bill) {
 
     List<Long> orderPositions = bill.getOrderPositionIds();
@@ -138,14 +135,12 @@ public class UcManageBillImpl extends AbstractBillUc implements UcManageBill {
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.DELETE_BILL)
   public void deleteBill(long billId) {
 
     getBillDao().delete(billId);
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.SAVE_BILL)
   public PaymentStatus doPayment(BillEto bill) {
 
     LOG.debug("The bill with id '" + bill.getId() + "' will be marked as payed.");
@@ -156,7 +151,6 @@ public class UcManageBillImpl extends AbstractBillUc implements UcManageBill {
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.SAVE_BILL)
   public PaymentStatus doPayment(BillEto bill, PaymentData paymentDataDebitor) {
 
     // REVIEW <who> (hohwille) Remove this hack or replace with something reasonable.

@@ -1,6 +1,21 @@
 package io.oasp.gastronomy.restaurant.offermanagement.logic.impl;
 
-import io.oasp.gastronomy.restaurant.general.common.api.constants.PermissionConstants;
+import java.sql.Blob;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.transaction.Transactional;
+import javax.validation.Valid;
+
+import net.sf.mmm.util.exception.api.ObjectMismatchException;
+import net.sf.mmm.util.exception.api.ObjectNotFoundUserException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.oasp.gastronomy.restaurant.general.logic.api.to.BinaryObjectEto;
 import io.oasp.gastronomy.restaurant.general.logic.base.AbstractComponentFacade;
 import io.oasp.gastronomy.restaurant.general.logic.base.UcManageBinaryObject;
@@ -28,23 +43,6 @@ import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.ProductSearchC
 import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.ProductSortBy;
 import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.SideDishEto;
 import io.oasp.module.jpa.common.api.to.PaginatedListTo;
-
-import java.sql.Blob;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-import javax.annotation.security.RolesAllowed;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.transaction.Transactional;
-import javax.validation.Valid;
-
-import net.sf.mmm.util.exception.api.ObjectMismatchException;
-import net.sf.mmm.util.exception.api.ObjectNotFoundUserException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Implementation class for {@link Offermanagement}.
@@ -83,7 +81,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.FIND_OFFER)
   public OfferEto findOffer(Long id) {
 
     LOG.debug("Get OfferEto with id '{}' from database.", id);
@@ -91,7 +88,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.FIND_OFFER)
   public OfferCto findOfferCto(Long id) {
 
     LOG.debug("Get OfferCTO with id '{}' from database.", id);
@@ -121,7 +117,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.FIND_OFFER)
   public List<OfferEto> findAllOffers() {
 
     LOG.debug("Get all offers from database.");
@@ -129,7 +124,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed({ PermissionConstants.FIND_OFFER, PermissionConstants.FIND_PRODUCT })
   public boolean isProductInUseByOffer(ProductEto product) {
 
     LOG.debug("Get all offers from database for the given product with id '" + product.getId() + "'.");
@@ -197,7 +191,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.FIND_OFFER)
   public List<OfferEto> findOffersFiltered(OfferFilter offerFilterBo, OfferSortBy sortBy) {
 
     List<OfferEntity> offers = getOfferDao().findOffersFiltered(offerFilterBo, sortBy);
@@ -211,14 +204,12 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.DELETE_OFFER)
   public void deleteOffer(Long offerId) {
 
     getOfferDao().delete(offerId);
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.SAVE_OFFER)
   public OfferEto saveOffer(@Valid OfferEto offer) {
 
     Objects.requireNonNull(offer, "offer");
@@ -232,7 +223,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.FIND_PRODUCT)
   public ProductEto findProduct(Long id) {
 
     LOG.debug("Get Product with id '" + id + "' from database.");
@@ -245,7 +235,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.FIND_PRODUCT)
   public MealEto findMeal(Long id) {
 
     ProductEto product = findProduct(id);
@@ -257,7 +246,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.FIND_PRODUCT)
   public DrinkEto findDrink(Long id) {
 
     ProductEto product = findProduct(id);
@@ -269,7 +257,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.FIND_PRODUCT)
   public SideDishEto findSideDish(Long id) {
 
     ProductEto product = findProduct(id);
@@ -281,7 +268,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.FIND_PRODUCT)
   public List<ProductEto> findAllProducts() {
 
     LOG.debug("Get all products from database.");
@@ -289,7 +275,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.FIND_PRODUCT)
   public List<MealEto> findAllMeals() {
 
     LOG.debug("Get all meals with from database.");
@@ -297,7 +282,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.FIND_PRODUCT)
   public List<DrinkEto> findAllDrinks() {
 
     LOG.debug("Get all drinks with from database.");
@@ -305,7 +289,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.FIND_PRODUCT)
   public List<SideDishEto> findAllSideDishes() {
 
     LOG.debug("Get all sidedishes with from database.");
@@ -313,7 +296,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.FIND_OFFER)
   public List<ProductEto> findProductsFiltered(ProductFilter productFilterBo, ProductSortBy sortBy) {
 
     LOG.debug("Fetch filtered offers.");
@@ -321,7 +303,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.FIND_PRODUCT)
   public BinaryObjectEto findProductPicture(Long productId) {
 
     ProductEto product = findProduct(productId);
@@ -333,7 +314,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.FIND_PRODUCT_PICTURE)
   public Blob findProductPictureBlob(Long productId) {
 
     ProductEto product = findProduct(productId);
@@ -345,7 +325,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.FIND_PRODUCT_PICTURE)
   public ProductEto findProductByRevision(Long id, Number revision) {
 
     LOG.debug("Get Product with id '" + id + "' and revision '" + revision + "' from database.");
@@ -358,7 +337,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.SAVE_PRODUCT)
   public ProductEto saveProduct(ProductEto product) {
 
     Objects.requireNonNull(product, "product");
@@ -368,14 +346,12 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.DELETE_PRODUCT)
   public void deleteProduct(Long productId) {
 
     getProductDao().delete(productId);
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.SAVE_PRODUCT_PICTURE)
   public void updateProductPicture(Long productId, Blob blob, BinaryObjectEto binaryObjectEto) {
 
     ProductEntity product = getProductDao().findOne(productId);
@@ -390,7 +366,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.DELETE_PRODUCT_PICTURE)
   public void deleteProductPicture(Long productId) {
 
     ProductEntity product = getProductDao().findOne(productId);
@@ -400,7 +375,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.FIND_OFFER)
   public PaginatedListTo<OfferEto> findOfferEtos(OfferSearchCriteriaTo criteria) {
 
     criteria.limitMaximumPageSize(MAXIMUM_HIT_LIMIT);
@@ -409,7 +383,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.FIND_PRODUCT)
   public PaginatedListTo<ProductEto> findProductEtos(ProductSearchCriteriaTo criteria) {
 
     criteria.limitMaximumPageSize(MAXIMUM_HIT_LIMIT);
