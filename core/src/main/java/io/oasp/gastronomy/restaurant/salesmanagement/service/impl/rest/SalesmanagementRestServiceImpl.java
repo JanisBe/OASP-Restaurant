@@ -2,10 +2,13 @@ package io.oasp.gastronomy.restaurant.salesmanagement.service.impl.rest;
 
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderState;
+import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.Salesmanagement;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderEto;
+import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderSearchCriteriaTo;
 import io.oasp.gastronomy.restaurant.salesmanagement.service.api.rest.SalesmanagementRestService;
 
 /**
@@ -14,6 +17,9 @@ import io.oasp.gastronomy.restaurant.salesmanagement.service.api.rest.Salesmanag
  */
 @Named("SalesmanagementRestService")
 public class SalesmanagementRestServiceImpl implements SalesmanagementRestService {
+
+  @Inject
+  private Salesmanagement salesmanagement;
 
   @Override
   public OrderEto getOrder(long id) {
@@ -32,8 +38,10 @@ public class SalesmanagementRestServiceImpl implements SalesmanagementRestServic
   @Override
   public List<OrderEto> searchOrder(OrderState orderState, long tableId) {
 
-    // TODO Auto-generated method stub
-    return null;
+    OrderSearchCriteriaTo orderSearchCriteriaTo = new OrderSearchCriteriaTo();
+    orderSearchCriteriaTo.setOrderState(orderState);
+    orderSearchCriteriaTo.setTableId(tableId);
+    return this.salesmanagement.findOrders(orderSearchCriteriaTo);
   }
 
 }
