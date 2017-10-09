@@ -44,16 +44,26 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
     return o1;
   }
 
+  private OrderEto createDummyOrderById(Long id) {
+
+    OrderEto o1 = new OrderEto();
+    o1.setId(id);
+    o1.setModificationCounter(1);
+    o1.setRevision(Integer.valueOf(3));
+    o1.setState(OrderState.OPEN);
+    return o1;
+  }
+
   @Override
   public OrderEto findOrderById(Long orderId) {
 
-    return createDummyOrder(OrderState.CLOSED);
+    return createDummyOrderById(orderId);
   }
 
   @Override
   public OrderEto addNewOrder(OrderEto orderEto) {
 
-    return createDummyOrder(OrderState.CLOSED);
+    return orderEto;
   }
 
 }

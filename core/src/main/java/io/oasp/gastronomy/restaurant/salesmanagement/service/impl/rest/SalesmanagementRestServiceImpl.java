@@ -24,15 +24,13 @@ public class SalesmanagementRestServiceImpl implements SalesmanagementRestServic
   @Override
   public OrderEto getOrder(long id) {
 
-    // TODO Auto-generated method stub
-    return null;
+    return this.salesmanagement.findOrderById(id);
   }
 
   @Override
   public OrderEto saveOrder(OrderEto order) {
 
-    // TODO Auto-generated method stub
-    return null;
+    return this.salesmanagement.addNewOrder(order);
   }
 
   @Override
