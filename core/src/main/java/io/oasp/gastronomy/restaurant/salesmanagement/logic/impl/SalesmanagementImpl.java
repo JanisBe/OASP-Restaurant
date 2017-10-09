@@ -56,11 +56,4 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
     return createDummyOrder(OrderState.CLOSED);
   }
 
-  @Override
-  public List<OrderEto> findOrderByCriteria(OrderState orderState, Long tableId) {
-
-    // TODO Auto-generated method stub
-    return null;
-  }
-
 }

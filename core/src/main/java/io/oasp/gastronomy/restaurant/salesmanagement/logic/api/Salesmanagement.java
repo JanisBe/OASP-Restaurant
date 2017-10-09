@@ -2,7 +2,6 @@ package io.oasp.gastronomy.restaurant.salesmanagement.logic.api;
 
 import java.util.List;
 
-import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderState;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderEto;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderSearchCriteriaTo;
 
@@ -25,12 +24,5 @@ public interface Salesmanagement {
    * @return
    */
   OrderEto addNewOrder(OrderEto orderEto);
-
-  /**
-   * @param orderState
-   * @param tableId
-   * @return
-   */
-  List<OrderEto> findOrderByCriteria(OrderState orderState, Long tableId);
 
 }
