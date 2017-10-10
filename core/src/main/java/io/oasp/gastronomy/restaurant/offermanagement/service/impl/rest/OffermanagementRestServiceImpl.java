@@ -7,6 +7,7 @@ import javax.inject.Named;
 
 import io.oasp.gastronomy.restaurant.offermanagement.logic.api.Offermanagement;
 import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.OfferEto;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.ProductEto;
 import io.oasp.gastronomy.restaurant.offermanagement.service.api.rest.OffermanagementRestService;
 
 /**
@@ -24,7 +25,7 @@ public class OffermanagementRestServiceImpl implements OffermanagementRestServic
    * @param offerManagement the new value of the field tableManagement
    */
   @Inject
-  public void setTableManagement(Offermanagement offerManagement) {
+  public void setOfferManagement(Offermanagement offerManagement) {
 
     this.offerManagement = offerManagement;
   }
@@ -51,6 +52,24 @@ public class OffermanagementRestServiceImpl implements OffermanagementRestServic
   public List<OfferEto> getAvailableOffers() {
 
     return this.offerManagement.getAvailableOffers();
+  }
+
+  @Override
+  public List<OfferEto> getPromotionOffers() {
+
+    return this.offerManagement.getPromotionOffers();
+  }
+
+  @Override
+  public List<ProductEto> findProductByName(String name) {
+
+    return this.offerManagement.findProductByName(name);
+  }
+
+  @Override
+  public ProductEto saveProduct(ProductEto menuItem) {
+
+    return this.offerManagement.saveProduct(menuItem);
   }
 
 }

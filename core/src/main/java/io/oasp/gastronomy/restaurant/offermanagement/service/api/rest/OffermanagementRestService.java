@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 
 import io.oasp.gastronomy.restaurant.general.common.api.RestService;
 import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.OfferEto;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.ProductEto;
 
 /**
  * @author DBIENIEK
@@ -33,10 +34,22 @@ public interface OffermanagementRestService extends RestService {
   List<OfferEto> getAllOffers();
 
   @GET
+  @Path("/offer/promotion/")
+  List<OfferEto> getPromotionOffers();
+
+  @GET
   @Path("/offer/available/")
   List<OfferEto> getAvailableOffers();
 
   @POST
   @Path("/offer/")
   OfferEto saveOffer(OfferEto offer);
+
+  @GET
+  @Path("/offer/menu/{name}/")
+  List<ProductEto> findProductByName(@PathParam("name") String name);
+
+  @POST
+  @Path("/offer/menu/")
+  ProductEto saveProduct(ProductEto menuItem);
 }
