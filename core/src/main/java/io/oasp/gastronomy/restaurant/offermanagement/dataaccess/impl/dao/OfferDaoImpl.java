@@ -1,5 +1,7 @@
 package io.oasp.gastronomy.restaurant.offermanagement.dataaccess.impl.dao;
 
+import java.util.List;
+
 import javax.inject.Named;
 import javax.persistence.TypedQuery;
 
@@ -28,6 +30,15 @@ public class OfferDaoImpl extends ApplicationMasterDataDaoImpl<OfferEntity> impl
   protected Class<OfferEntity> getEntityClass() {
 
     return OfferEntity.class;
+  }
+
+  @Override
+  public List<OfferEntity> findOfferEntitiesGivenNames(List<String> offerNames) {
+
+    TypedQuery<OfferEntity> query =
+        getEntityManager().createNamedQuery(NamedQueries.GET_OFFER_BY_NAMES, OfferEntity.class);
+    query.setParameter("names", offerNames);
+    return query.getResultList();
   }
 
 }

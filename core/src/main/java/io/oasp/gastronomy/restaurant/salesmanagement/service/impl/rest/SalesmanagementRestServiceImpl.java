@@ -5,7 +5,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderPositionState;
 import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderState;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.Salesmanagement;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderCto;
@@ -46,9 +45,15 @@ public class SalesmanagementRestServiceImpl implements SalesmanagementRestServic
   }
 
   @Override
-  public OrderPositionEto setOrderPositionStatus(Long tableId, OrderPositionState orderState) {
+  public OrderPositionEto deliverOrderPosition(Long tableId) {
 
-    return this.salesmanagement.setOrderPositionStatus(tableId, orderState);
+    return this.salesmanagement.deliverOrderPosition(tableId);
+  }
+
+  @Override
+  public OrderPositionEto prepareOrderPosition(Long tableId) {
+
+    return this.salesmanagement.prepareOrderPosition(tableId);
   }
 
 }

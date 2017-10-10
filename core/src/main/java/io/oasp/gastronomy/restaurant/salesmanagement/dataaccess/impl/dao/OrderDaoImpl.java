@@ -7,14 +7,14 @@ import javax.inject.Named;
 import io.oasp.gastronomy.restaurant.general.dataaccess.base.dao.ApplicationMasterDataDaoImpl;
 import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderState;
 import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.OrderEntity;
-import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.dao.OrderEntityDao;
+import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.dao.OrderDao;
 
 /**
  * @author PKALINIA
  *
  */
 @Named
-public class OrderDaoImpl extends ApplicationMasterDataDaoImpl<OrderEntity> implements OrderEntityDao {
+public class OrderDaoImpl extends ApplicationMasterDataDaoImpl<OrderEntity> implements OrderDao {
 
   @Override
   public OrderEntity findOrderById(Long id) {

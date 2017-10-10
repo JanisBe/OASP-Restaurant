@@ -82,4 +82,22 @@ public enum OrderPositionState {
     return (this == PAYED);
   }
 
+  /**
+   * OrderPositionState must be: Ordered if we want to Prepare it, Prepared if we want to Deliver it
+   *
+   * @param state
+   * @return
+   */
+  public boolean isOneAfter(OrderPositionState state) {
+
+    switch (state) {
+    case DELIVERED:
+      return isPrepared();
+    case PREPARED:
+      return isOrdered();
+    default:
+      return false;
+    }
+  }
+
 }

@@ -2,7 +2,6 @@ package io.oasp.gastronomy.restaurant.salesmanagement.logic.api;
 
 import java.util.List;
 
-import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderPositionState;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderCto;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderEto;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderPositionEto;
@@ -18,12 +17,12 @@ public interface Salesmanagement {
 
   OrderEto findOrderById(Long orderId);
 
-  OrderEto addNewOrder(OrderEto order);
-
   OrderEto changeOrderStatus(Long orderId);
 
-  OrderPositionEto setOrderPositionStatus(Long id, OrderPositionState orderState);
-
   OrderCto addNewOrder(OrderCto orderCto);
+
+  OrderPositionEto deliverOrderPosition(Long id);
+
+  OrderPositionEto prepareOrderPosition(Long id);
 
 }
