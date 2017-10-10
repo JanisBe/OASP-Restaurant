@@ -14,6 +14,7 @@ import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.OrderPositio
 import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.dao.OrderEntityDao;
 import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.dao.OrderPositionDao;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.Salesmanagement;
+import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderCto;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderEto;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderSearchCriteriaTo;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.base.UcFindOrder;
@@ -66,9 +67,14 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
   }
 
   @Override
+  public OrderCto addNewOrder(OrderCto orderCto) {
+
+    return orderCto;
+  }
+
+  @Override
   public OrderPositionEntity setOrderPositionStatus(Long id, OrderPositionState orderState) {
 
     return getBeanMapper().map(this.orderPostionDao.setOrderPositionStatus(id, orderState), OrderPositionEntity.class);
   }
-
 }

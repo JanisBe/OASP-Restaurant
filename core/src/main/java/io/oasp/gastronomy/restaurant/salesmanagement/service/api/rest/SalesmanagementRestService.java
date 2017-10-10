@@ -12,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderState;
+import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderCto;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderEto;
 
 /**
@@ -30,7 +31,7 @@ public interface SalesmanagementRestService {
 
   @POST
   @Path("/order/")
-  OrderEto saveOrder(Long tableId);
+  OrderCto saveOrder(OrderCto order);
 
   @GET
   @Path("/order/")

@@ -61,6 +61,8 @@
       <permission id="DeleteProduct"/>
       <permission id="SaveProductPicture"/>
       <permission id="DeleteProductPicture"/>
+      <permission id="GetAllOffers"/>
+      <permission id="SetAsSpecial"/>
       <!-- staffmanagement -->
       <permission id="SaveStaffMember"/>
       <permission id="DeleteStaffMember"/>

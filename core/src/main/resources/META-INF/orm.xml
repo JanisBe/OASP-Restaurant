@@ -9,6 +9,14 @@
   <named-query name="get.staff.member.by.login">
     <query><![CDATA[SELECT s FROM StaffMemberEntity s WHERE login = :login]]></query>
   </named-query>
+  
+    <named-query name="get.product.by.name">
+    <query><![CDATA[SELECT p FROM ProductEntity p WHERE name = :name]]></query>
+  </named-query>
+  
+      <named-query name="get.offer.by.name">
+    <query><![CDATA[SELECT o FROM OfferEntity o WHERE name = :name]]></query>
+  </named-query>
 
   <named-query name="get.open.order.positions.for.order">
     <query><![CDATA[SELECT op FROM OrderPositionEntity op where op.order.id = :orderId AND op.state NOT IN (io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderPositionState.PAYED, io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderPositionState.CANCELLED)]]></query>

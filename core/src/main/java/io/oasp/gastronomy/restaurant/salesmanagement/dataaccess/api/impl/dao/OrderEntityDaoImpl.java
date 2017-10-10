@@ -1,5 +1,7 @@
 package io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.impl.dao;
 
+import java.util.List;
+
 import javax.inject.Named;
 
 import io.oasp.gastronomy.restaurant.general.dataaccess.base.dao.ApplicationMasterDataDaoImpl;
@@ -28,7 +30,7 @@ public class OrderEntityDaoImpl extends ApplicationMasterDataDaoImpl<OrderEntity
   }
 
   @Override
-  public OrderEntity findOrderByTableAndOrderState(Long tableId, OrderState orderState) {
+  public List<OrderEntity> findOrderByTableAndOrderState(Long tableId, OrderState orderState) {
 
     return null;
   }
