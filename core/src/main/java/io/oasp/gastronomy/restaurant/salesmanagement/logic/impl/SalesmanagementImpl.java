@@ -150,7 +150,12 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
 
   private OrderPositionEto setOrderPositionStatus(Long id, OrderPositionState orderState) {
 
-    return getBeanMapper().map(this.orderPositionDao.setOrderPositionStatus(id, orderState), OrderPositionEto.class);
+    OrderPositionEto foundPosition = getBeanMapper().map(getOrderPositionDao().find(id), OrderPositionEto.class);
+    if (orderState.isOneAfter(foundPosition.getState())) {
+      return getBeanMapper().map(this.orderPositionDao.setOrderPositionStatus(id, orderState), OrderPositionEto.class);
+    } else {
+      throw new IllegalStateException("Wrong order state!");
+    }
   }
 
   private OrderPositionDao getOrderPositionDao() {
