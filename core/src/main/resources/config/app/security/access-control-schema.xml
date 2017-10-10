@@ -72,5 +72,17 @@
       <permission id="DeleteTable"/>
     </permissions>
   </group>
+  <group id="Chief2" type="role">
+    <inherits>
+      <group-ref>Waiter</group-ref>
+    </inherits>
+    <permissions>
+      <permission id="SaveProduct"/>
+      <permission id="SaveProductPicture"/>
+      <permission id="GetAllOffers"/>
+      <permission id="SetAsSpecial"/>
+      <permission id="SaveStaffMember"/>
+    </permissions>
+  </group>
   <!-- END ARCHETYPE SKIP -->
 </access-control-schema>

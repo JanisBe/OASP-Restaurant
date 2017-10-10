@@ -18,8 +18,6 @@ public interface Salesmanagement {
 
   OrderEto findOrderById(Long orderId);
 
-  OrderEto addNewOrder(OrderEto order);
-
   OrderEto changeOrderStatus(Long orderId);
 
   OrderPositionEto setOrderPositionStatus(Long id, OrderPositionState orderState);

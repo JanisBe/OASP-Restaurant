@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 
+import io.oasp.gastronomy.restaurant.general.common.api.constants.PermissionConstants;
 import io.oasp.gastronomy.restaurant.general.logic.base.AbstractComponentFacade;
 import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.OfferEntity;
 import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.dao.OfferDao;
@@ -55,16 +57,10 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
   }
 
   @Override
+  @RolesAllowed(PermissionConstants.FIND_ORDER)
   public OrderEto findOrderById(Long orderId) {
 
     return this.ucFindOrder.findOrderById(orderId);
-  }
-
-  @Override
-  public OrderEto addNewOrder(OrderEto order) {
-
-    OrderEntity orderEntity = this.orderDao.createOrder(getBeanMapper().map(order, OrderEntity.class));
-    return getBeanMapper().map(orderEntity, OrderEto.class);
   }
 
   @Override
@@ -75,6 +71,7 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
 
   @Override
   @Transactional
+  @RolesAllowed(PermissionConstants.SAVE_ORDER)
   public OrderCto addNewOrder(OrderCto orderCto) {
 
     OrderEntity orderEntity = getBeanMapper().map(orderCto.getOrder(), OrderEntity.class);
