@@ -28,9 +28,9 @@ public class SalesmanagementRestServiceImpl implements SalesmanagementRestServic
   }
 
   @Override
-  public OrderEto saveOrder(OrderEto order) {
+  public OrderEto saveOrder(Long tableId) {
 
-    return this.salesmanagement.addNewOrder(order);
+    return this.salesmanagement.addNewOrder(tableId);
   }
 
   @Override

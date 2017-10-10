@@ -8,7 +8,11 @@ import javax.inject.Named;
 import javax.transaction.Transactional;
 
 import io.oasp.gastronomy.restaurant.general.logic.base.AbstractComponentFacade;
-import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderState;
+import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderPositionState;
+import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.OrderEntity;
+import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.OrderPositionEntity;
+import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.dao.OrderEntityDao;
+import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.dao.OrderPositionDao;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.Salesmanagement;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderEto;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderSearchCriteriaTo;
@@ -24,28 +28,22 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
   @Inject
   private UcFindOrder ucFindOrder;
 
+  @Inject
+  private OrderEntityDao orderEntityDao;
+
+  @Inject
+  private OrderPositionDao orderPostionDao;
+
   @Override
   public List<OrderEto> findOrders(OrderSearchCriteriaTo orderSearchCriteriaTo) {
 
-    // TODO Access to DAO
-    List<OrderEto> list = new ArrayList<OrderEto>();
-    list.add(createDummyOrder(OrderState.CLOSED));
-    list.add(createDummyOrder(OrderState.OPEN));
-    // end TODO
+    List<OrderEto> list = new ArrayList<>();
+    List<OrderEntity> listOfEntities = this.orderEntityDao
+        .findOrderByTableAndOrderState(orderSearchCriteriaTo.getTableId(), orderSearchCriteriaTo.getOrderState());
+    for (OrderEntity entity : listOfEntities) {
+      list.add(getBeanMapper().map(entity, OrderEto.class));
+    }
     return list;
-  }
-
-  /**
-   * @return
-   */
-  private OrderEto createDummyOrder(OrderState state) {
-
-    OrderEto o1 = new OrderEto();
-    o1.setId(33l);
-    o1.setModificationCounter(1);
-    o1.setRevision(Integer.valueOf(3));
-    o1.setState(state);
-    return o1;
   }
 
   @Override
@@ -55,9 +53,22 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
   }
 
   @Override
-  public OrderEto addNewOrder(OrderEto orderEto) {
+  public OrderEto addNewOrder(OrderEto order) {
 
-    return orderEto;
+    OrderEntity orderEntity = this.orderEntityDao.createOrder(getBeanMapper().map(order, OrderEntity.class));
+    return getBeanMapper().map(orderEntity, OrderEto.class);
+  }
+
+  @Override
+  public OrderEto changeOrderStatus(Long orderId) {
+
+    return this.ucFindOrder.findOrderById(orderId);
+  }
+
+  @Override
+  public OrderPositionEntity setOrderPositionStatus(Long id, OrderPositionState orderState) {
+
+    return getBeanMapper().map(this.orderPostionDao.setOrderPositionStatus(id, orderState), OrderPositionEntity.class);
   }
 
 }

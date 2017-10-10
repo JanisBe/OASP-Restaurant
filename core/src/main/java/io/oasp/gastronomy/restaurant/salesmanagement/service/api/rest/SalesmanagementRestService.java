@@ -30,7 +30,7 @@ public interface SalesmanagementRestService {
 
   @POST
   @Path("/order/")
-  OrderEto saveOrder(OrderEto order);
+  OrderEto saveOrder(Long tableId);
 
   @GET
   @Path("/order/")
