@@ -14,6 +14,8 @@ public abstract class NamedQueries {
   /** @see io.oasp.gastronomy.restaurant.staffmanagement.dataaccess.impl.dao.StaffMemberDaoImpl#findByLogin(String) */
   public static final String GET_STAFF_MEMBER_BY_LOGIN = "get.staff.member.by.login";
 
+  public static final String GET_PRODUCT_BY_NAME = "get.product.by.name";
+
   /** @see io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.impl.dao.OrderPositionDaoImpl */
   public static final String GET_ALL_ORDER_POSITIONS = "get.all.order.positions";
 
@@ -28,5 +30,7 @@ public abstract class NamedQueries {
 
   /** @see io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.impl.dao.BillDaoImpl */
   public static final String GET_ALL_IDS_OF_PAYED_BILLS = "get.all.ids.of.payed.bills";
+
   // END ARCHETYPE SKIP
+
 }
