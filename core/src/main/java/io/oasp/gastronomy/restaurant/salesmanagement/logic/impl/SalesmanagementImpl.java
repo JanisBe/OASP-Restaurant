@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import io.oasp.gastronomy.restaurant.general.logic.base.AbstractComponentFacade;
 import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.OfferEntity;
 import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.dao.OfferDao;
-import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderState;
+import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderPositionState;
 import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.OrderEntity;
 import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.OrderPositionEntity;
 import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.dao.OrderDao;
@@ -49,29 +49,26 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
   @Override
   public List<OrderEto> findOrders(OrderSearchCriteriaTo orderSearchCriteriaTo) {
 
-    // TODO Access to DAO
-    List<OrderEto> list = new ArrayList<OrderEto>();
-    list.add(createDummyOrder(OrderState.CLOSED));
-    list.add(createDummyOrder(OrderState.OPEN));
-    // end TODO
-    return list;
-  }
-
-  /**
-   * @return
-   */
-  private OrderEto createDummyOrder(OrderState state) {
-
-    OrderEto o1 = new OrderEto();
-    o1.setId(33l);
-    o1.setModificationCounter(1);
-    o1.setRevision(Integer.valueOf(3));
-    o1.setState(state);
-    return o1;
+    List<OrderEntity> listOfEntities = this.orderDao.findOrderByTableAndOrderState(orderSearchCriteriaTo.getTableId(),
+        orderSearchCriteriaTo.getOrderState());
+    return getBeanMapper().mapList(listOfEntities, OrderEto.class);
   }
 
   @Override
   public OrderEto findOrderById(Long orderId) {
+
+    return this.ucFindOrder.findOrderById(orderId);
+  }
+
+  @Override
+  public OrderEto addNewOrder(OrderEto order) {
+
+    OrderEntity orderEntity = this.orderDao.createOrder(getBeanMapper().map(order, OrderEntity.class));
+    return getBeanMapper().map(orderEntity, OrderEto.class);
+  }
+
+  @Override
+  public OrderEto changeOrderStatus(Long orderId) {
 
     return this.ucFindOrder.findOrderById(orderId);
   }
@@ -140,4 +137,9 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
     return orderCto;
   }
 
+  @Override
+  public OrderPositionEto setOrderPositionStatus(Long id, OrderPositionState orderState) {
+
+    return getBeanMapper().map(this.orderPositionDao.setOrderPositionStatus(id, orderState), OrderPositionEto.class);
+  }
 }
