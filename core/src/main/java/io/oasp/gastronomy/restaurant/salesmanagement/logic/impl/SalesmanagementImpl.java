@@ -1,6 +1,5 @@
 package io.oasp.gastronomy.restaurant.salesmanagement.logic.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -10,12 +9,12 @@ import javax.transaction.Transactional;
 import io.oasp.gastronomy.restaurant.general.logic.base.AbstractComponentFacade;
 import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderPositionState;
 import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.OrderEntity;
-import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.OrderPositionEntity;
 import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.dao.OrderEntityDao;
 import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.dao.OrderPositionDao;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.Salesmanagement;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderCto;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderEto;
+import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderPositionEto;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderSearchCriteriaTo;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.base.UcFindOrder;
 
@@ -38,13 +37,9 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
   @Override
   public List<OrderEto> findOrders(OrderSearchCriteriaTo orderSearchCriteriaTo) {
 
-    List<OrderEto> list = new ArrayList<>();
     List<OrderEntity> listOfEntities = this.orderEntityDao
         .findOrderByTableAndOrderState(orderSearchCriteriaTo.getTableId(), orderSearchCriteriaTo.getOrderState());
-    for (OrderEntity entity : listOfEntities) {
-      list.add(getBeanMapper().map(entity, OrderEto.class));
-    }
-    return list;
+    return getBeanMapper().mapList(listOfEntities, OrderEto.class);
   }
 
   @Override
@@ -73,8 +68,8 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
   }
 
   @Override
-  public OrderPositionEntity setOrderPositionStatus(Long id, OrderPositionState orderState) {
+  public OrderPositionEto setOrderPositionStatus(Long id, OrderPositionState orderState) {
 
-    return getBeanMapper().map(this.orderPostionDao.setOrderPositionStatus(id, orderState), OrderPositionEntity.class);
+    return getBeanMapper().map(this.orderPostionDao.setOrderPositionStatus(id, orderState), OrderPositionEto.class);
   }
 }
