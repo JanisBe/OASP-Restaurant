@@ -7,6 +7,7 @@ import javax.inject.Named;
 
 import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderState;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.Salesmanagement;
+import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderCto;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderEto;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderSearchCriteriaTo;
 import io.oasp.gastronomy.restaurant.salesmanagement.service.api.rest.SalesmanagementRestService;
@@ -28,7 +29,7 @@ public class SalesmanagementRestServiceImpl implements SalesmanagementRestServic
   }
 
   @Override
-  public OrderEto saveOrder(OrderEto order) {
+  public OrderCto saveOrder(OrderCto order) {
 
     return this.salesmanagement.addNewOrder(order);
   }
