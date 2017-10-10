@@ -11,7 +11,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderPositionState;
 import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderState;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderCto;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderEto;
@@ -40,7 +39,10 @@ public interface SalesmanagementRestService {
   List<OrderEto> searchOrder(@PathParam("state") OrderState orderState, @PathParam("tableId") Long tableId);
 
   @POST
-  @Path("/changeStatus")
-  OrderPositionEto setOrderPositionStatus(@PathParam("tableId") Long tableId,
-      @PathParam("orderState") OrderPositionState orderState);
+  @Path("/order/deliver/")
+  OrderPositionEto deliverOrderPosition(@PathParam("tableId") Long tableId);
+
+  @POST
+  @Path("/order/prepare/")
+  OrderPositionEto prepareOrderPosition(@PathParam("tableId") Long tableId);
 }

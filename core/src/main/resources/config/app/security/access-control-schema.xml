@@ -25,6 +25,8 @@
       <permission id="SaveTable"/>
       <!-- offermanagement -->
       <permission id="SaveOffer"/>
+      <!-- salesmanagement -->
+      <permission id="DeliverOrder"/>
     </permissions>
   </group>
   <group id="Barkeeper" type="role">
@@ -49,6 +51,7 @@
       <permission id="FindOrder"/>
       <permission id="SaveOrderPosition"/>
       <permission id="FindOrderPosition"/>
+      <permission id="PrepareOrder"/>
     </permissions>
   </group>
   <group id="Chief" type="role">
