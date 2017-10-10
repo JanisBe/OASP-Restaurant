@@ -84,5 +84,9 @@ public abstract class PermissionConstants {
   public static final String GET_ALL_OFFERS = "GetAllOffers";
 
   public static final String SET_AS_SPECIAL = "SetAsSpecial";
+
+  public static final String PREPARE_ORDER = "PrepareOrder";
+
+  public static final String DELIVER_ORDER = "DeliverOrder";
   // END ARCHETYPE SKIP
 }

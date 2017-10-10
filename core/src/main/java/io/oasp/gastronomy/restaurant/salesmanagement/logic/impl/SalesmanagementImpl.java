@@ -135,8 +135,31 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
   }
 
   @Override
-  public OrderPositionEto setOrderPositionStatus(Long id, OrderPositionState orderState) {
+  @RolesAllowed(PermissionConstants.DELIVER_ORDER)
+  public OrderPositionEto deliverOrderPosition(Long id) {
+
+    return setOrderPositionStatus(id, OrderPositionState.DELIVERED);
+  }
+
+  @Override
+  @RolesAllowed(PermissionConstants.PREPARE_ORDER)
+  public OrderPositionEto prepareOrderPosition(Long id) {
+
+    return setOrderPositionStatus(id, OrderPositionState.PREPARED);
+  }
+
+  private OrderPositionEto setOrderPositionStatus(Long id, OrderPositionState orderState) {
 
     return getBeanMapper().map(this.orderPositionDao.setOrderPositionStatus(id, orderState), OrderPositionEto.class);
+  }
+
+  private OrderPositionDao getOrderPositionDao() {
+
+    return this.orderPositionDao;
+  }
+
+  private OrderDao getOrderDao() {
+
+    return this.orderDao;
   }
 }
