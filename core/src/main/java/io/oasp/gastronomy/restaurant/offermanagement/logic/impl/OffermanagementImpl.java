@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import io.oasp.gastronomy.restaurant.general.common.api.constants.PermissionConstants;
 import io.oasp.gastronomy.restaurant.general.logic.base.AbstractComponentFacade;
@@ -18,6 +19,7 @@ import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.dao.ProductD
 import io.oasp.gastronomy.restaurant.offermanagement.logic.api.Offermanagement;
 import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.OfferEto;
 import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.ProductEto;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.exceptions.OrderNotValidException;
 
 /**
  * @author DBIENIEK
@@ -26,8 +28,10 @@ import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.ProductEto;
 @Named
 public class OffermanagementImpl extends AbstractComponentFacade implements Offermanagement {
 
+  @Autowired
   private ProductDao mProductDao;
 
+  @Autowired
   private OfferDao mOfferDao;
 
   @Override
@@ -39,12 +43,15 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
+  @RolesAllowed(PermissionConstants.SAVE_OFFER)
   public OfferEto saveOffer(OfferEto offer) {
 
     if (isValidOffer(offer)) {
-      return offer;
+      OfferEntity persistedOffer = getOfferDao().save(getBeanMapper().map(offer, OfferEntity.class));
+      return getBeanMapper().map(persistedOffer, OfferEto.class);
+    } else {
+      throw new OrderNotValidException();
     }
-    return new OfferEto();
   }
 
   private boolean isValidOffer(OfferEto offer) {
@@ -53,7 +60,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.GET_ALL_OFFERS)
   public List<OfferEto> getAllOffers() {
 
     return getBeanMapper().mapList(getOfferDao().findAll(), OfferEto.class);
@@ -97,18 +103,6 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   public OfferDao getOfferDao() {
 
     return this.mOfferDao;
-  }
-
-  @Inject
-  public void setProductDao(ProductDao productDao) {
-
-    this.mProductDao = productDao;
-  }
-
-  @Inject
-  public void setOfferDao(OfferDao offerDao) {
-
-    this.mOfferDao = offerDao;
   }
 
   @Override
