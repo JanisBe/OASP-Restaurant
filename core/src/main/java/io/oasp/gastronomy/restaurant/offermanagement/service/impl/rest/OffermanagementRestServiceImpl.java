@@ -17,6 +17,7 @@ import io.oasp.gastronomy.restaurant.offermanagement.service.api.rest.Offermanag
 @Named("OffermanagementRestService")
 public class OffermanagementRestServiceImpl implements OffermanagementRestService {
 
+  // @Autowired
   private Offermanagement offerManagement;
 
   /**
@@ -61,15 +62,27 @@ public class OffermanagementRestServiceImpl implements OffermanagementRestServic
   }
 
   @Override
-  public List<ProductEto> findProductByName(String name) {
+  public ProductEto findProductByName(String name) {
 
     return this.offerManagement.findProductByName(name);
   }
 
   @Override
-  public ProductEto saveProduct(ProductEto menuItem) {
+  public void saveProduct(List<ProductEto> menuItems) {
 
-    return this.offerManagement.saveProduct(menuItem);
+    this.offerManagement.saveProduct(menuItems);
+  }
+
+  @Override
+  public List<ProductEto> getAllProducts() {
+
+    return this.offerManagement.getAllProducts();
+  }
+
+  @Override
+  public OfferEto setAsSpecial(String name) {
+
+    return this.offerManagement.setAsSpecial(name);
   }
 
 }

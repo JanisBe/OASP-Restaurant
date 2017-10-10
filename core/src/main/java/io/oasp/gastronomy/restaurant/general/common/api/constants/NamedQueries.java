@@ -16,6 +16,8 @@ public abstract class NamedQueries {
 
   public static final String GET_PRODUCT_BY_NAME = "get.product.by.name";
 
+  public static final String GET_OFFER_BY_NAME = "get.offer.by.name";
+
   /** @see io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.impl.dao.OrderPositionDaoImpl */
   public static final String GET_ALL_ORDER_POSITIONS = "get.all.order.positions";
 

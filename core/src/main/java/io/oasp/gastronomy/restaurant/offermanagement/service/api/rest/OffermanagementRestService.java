@@ -30,7 +30,7 @@ public interface OffermanagementRestService extends RestService {
   OfferEto getOffer(@PathParam("id") long id);
 
   @GET
-  @Path("/offer/all/")
+  @Path("/offer/")
   List<OfferEto> getAllOffers();
 
   @GET
@@ -45,11 +45,19 @@ public interface OffermanagementRestService extends RestService {
   @Path("/offer/")
   OfferEto saveOffer(OfferEto offer);
 
+  @POST
+  @Path("/offer/setAsSpecial/{name}")
+  OfferEto setAsSpecial(@PathParam("name") String name);
+
   @GET
   @Path("/offer/menu/{name}/")
-  List<ProductEto> findProductByName(@PathParam("name") String name);
+  ProductEto findProductByName(@PathParam("name") String name);
+
+  @GET
+  @Path("/offer/menu/")
+  List<ProductEto> getAllProducts();
 
   @POST
   @Path("/offer/menu/")
-  ProductEto saveProduct(ProductEto menuItem);
+  void saveProduct(List<ProductEto> menuItems);
 }

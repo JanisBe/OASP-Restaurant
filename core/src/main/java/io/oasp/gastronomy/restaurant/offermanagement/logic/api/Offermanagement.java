@@ -41,11 +41,23 @@ public interface Offermanagement {
   /**
    * @return
    */
-  List<ProductEto> findProductByName(String name);
+  ProductEto findProductByName(String name);
 
   /**
    * @param menuItem
    * @return
+   * @return
    */
-  ProductEto saveProduct(ProductEto product);
+  void saveProduct(List<ProductEto> product);
+
+  /**
+   * @return
+   */
+  List<ProductEto> getAllProducts();
+
+  /**
+   * @param name
+   * @return
+   */
+  OfferEto setAsSpecial(String name);
 }
