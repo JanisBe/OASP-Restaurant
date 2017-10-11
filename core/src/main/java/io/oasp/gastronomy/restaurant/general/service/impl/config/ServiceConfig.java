@@ -26,6 +26,7 @@ import org.springframework.ws.config.annotation.WsConfigurerAdapter;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 
+import io.oasp.gastronomy.restaurant.offermanagement.service.impl.ws.OffermanagementWebServiceImpl;
 // BEGIN ARCHETYPE SKIP
 import io.oasp.gastronomy.restaurant.tablemanagement.service.impl.ws.v1_0.TablemanagementWebServiceImpl;
 // END ARCHETYPE SKIP
@@ -127,6 +128,15 @@ public class ServiceConfig extends WsConfigurerAdapter {
     // Bus bus = (Bus) this.applicationContext.getBean(Bus.DEFAULT_BUS_ID);
     EndpointImpl endpoint = new EndpointImpl(springBus(), new TablemanagementWebServiceImpl());
     endpoint.publish("/TablemanagementWebService");
+    return endpoint;
+  }
+
+  @Bean
+  public Endpoint offerManagement() {
+
+    // Bus bus = (Bus) this.applicationContext.getBean(Bus.DEFAULT_BUS_ID);
+    EndpointImpl endpoint = new EndpointImpl(springBus(), new OffermanagementWebServiceImpl());
+    endpoint.publish("/OffermanagementWebService");
     return endpoint;
   }
   // END ARCHETYPE SKIP

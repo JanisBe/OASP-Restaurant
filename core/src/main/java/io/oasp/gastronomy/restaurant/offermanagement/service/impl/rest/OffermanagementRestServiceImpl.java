@@ -2,12 +2,14 @@ package io.oasp.gastronomy.restaurant.offermanagement.service.impl.rest;
 
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import io.oasp.gastronomy.restaurant.offermanagement.logic.api.Offermanagement;
 import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.OfferEto;
 import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.ProductEto;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.exceptions.OrderNotValidException;
 import io.oasp.gastronomy.restaurant.offermanagement.service.api.rest.OffermanagementRestService;
 
 /**
@@ -17,19 +19,8 @@ import io.oasp.gastronomy.restaurant.offermanagement.service.api.rest.Offermanag
 @Named("OffermanagementRestService")
 public class OffermanagementRestServiceImpl implements OffermanagementRestService {
 
-  // @Autowired
+  @Autowired
   private Offermanagement offerManagement;
-
-  /**
-   * This method sets the field <tt>offerManagement</tt>.
-   *
-   * @param offerManagement the new value of the field tableManagement
-   */
-  @Inject
-  public void setOfferManagement(Offermanagement offerManagement) {
-
-    this.offerManagement = offerManagement;
-  }
 
   @Override
   public OfferEto getOffer(long id) {
@@ -38,7 +29,7 @@ public class OffermanagementRestServiceImpl implements OffermanagementRestServic
   }
 
   @Override
-  public OfferEto saveOffer(OfferEto offer) {
+  public OfferEto saveOffer(OfferEto offer) throws OrderNotValidException {
 
     return this.offerManagement.saveOffer(offer);
   }
@@ -68,9 +59,9 @@ public class OffermanagementRestServiceImpl implements OffermanagementRestServic
   }
 
   @Override
-  public void saveProduct(List<ProductEto> menuItems) {
+  public void saveProducts(List<ProductEto> menuItems) {
 
-    this.offerManagement.saveProduct(menuItems);
+    this.offerManagement.saveProducts(menuItems);
   }
 
   @Override

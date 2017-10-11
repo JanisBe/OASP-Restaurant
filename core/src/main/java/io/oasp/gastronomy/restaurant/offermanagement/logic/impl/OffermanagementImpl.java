@@ -44,13 +44,17 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
 
   @Override
   @RolesAllowed(PermissionConstants.SAVE_OFFER)
-  public OfferEto saveOffer(OfferEto offer) {
+  public OfferEto saveOffer(OfferEto offer) throws OrderNotValidException {
 
     if (isValidOffer(offer)) {
       OfferEntity persistedOffer = getOfferDao().save(getBeanMapper().map(offer, OfferEntity.class));
       return getBeanMapper().map(persistedOffer, OfferEto.class);
     } else {
-      throw new OrderNotValidException();
+      StringBuilder sb = new StringBuilder();
+      sb.append("Offer: ");
+      sb.append(offer.getDescription());
+      sb.append(" must have Dring or Meal or SideDish.");
+      throw new OrderNotValidException(sb.toString());
     }
   }
 
@@ -107,7 +111,7 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
 
   @Override
   @Transactional
-  public void saveProduct(List<ProductEto> menuItems) {
+  public void saveProducts(List<ProductEto> menuItems) {
 
     getProductDao().save(getBeanMapper().mapList(menuItems, ProductEntity.class));
   }
