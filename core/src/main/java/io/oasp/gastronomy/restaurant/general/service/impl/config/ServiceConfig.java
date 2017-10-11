@@ -126,7 +126,8 @@ public class ServiceConfig extends WsConfigurerAdapter {
   public Endpoint tableManagement() {
 
     // Bus bus = (Bus) this.applicationContext.getBean(Bus.DEFAULT_BUS_ID);
-    EndpointImpl endpoint = new EndpointImpl(springBus(), new TablemanagementWebServiceImpl());
+    TablemanagementWebServiceImpl bean = this.applicationContext.getBean(TablemanagementWebServiceImpl.class);
+    EndpointImpl endpoint = new EndpointImpl(springBus(), bean);
     endpoint.publish("/TablemanagementWebService");
     return endpoint;
   }
@@ -135,7 +136,8 @@ public class ServiceConfig extends WsConfigurerAdapter {
   public Endpoint offerManagement() {
 
     // Bus bus = (Bus) this.applicationContext.getBean(Bus.DEFAULT_BUS_ID);
-    EndpointImpl endpoint = new EndpointImpl(springBus(), new OffermanagementWebServiceImpl());
+    OffermanagementWebServiceImpl bean = this.applicationContext.getBean(OffermanagementWebServiceImpl.class);
+    EndpointImpl endpoint = new EndpointImpl(springBus(), bean);
     endpoint.publish("/OffermanagementWebService");
     return endpoint;
   }
