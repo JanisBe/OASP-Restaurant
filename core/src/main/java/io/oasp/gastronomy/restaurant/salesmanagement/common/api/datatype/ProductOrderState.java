@@ -51,4 +51,16 @@ public enum ProductOrderState {
     return (this == DELIVERED);
   }
 
+  public boolean isOneAfter(ProductOrderState state) {
+
+    switch (state) {
+    case DELIVERED:
+      return isPrepared();
+    case PREPARED:
+      return isOrdered();
+    default:
+      return false;
+    }
+  }
+
 }

@@ -45,4 +45,9 @@ public interface SalesmanagementRestService {
   @POST
   @Path("/order/prepare/")
   OrderPositionEto prepareOrderPosition(@PathParam("tableId") Long tableId);
+
+  /**
+   * @param order
+   * @return
+   */
 }

@@ -17,8 +17,6 @@ public interface Salesmanagement {
 
   OrderEto findOrderById(Long orderId);
 
-  OrderEto addNewOrder(OrderEto order);
-
   OrderEto changeOrderStatus(Long orderId);
 
   OrderCto addNewOrder(OrderCto orderCto);
@@ -26,5 +24,9 @@ public interface Salesmanagement {
   OrderPositionEto deliverOrderPosition(Long id);
 
   OrderPositionEto prepareOrderPosition(Long id);
+
+  OrderPositionEto setDrinkStatusToPrepared(Long id);
+
+  OrderPositionEto setDrinkStatusToDelivered(Long id);
 
 }

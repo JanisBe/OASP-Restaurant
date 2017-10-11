@@ -18,7 +18,7 @@ public class UcFindOrderImpl extends AbstractUc implements UcFindOrder {
   @Override
   public OrderEto findOrderById(Long orderId) {
 
-    return getBeanMapper().map(this.orderDao.findOrderById(orderId), OrderEto.class);
+    return getBeanMapper().map(this.orderDao.findOne(orderId), OrderEto.class);
   }
 
 }
