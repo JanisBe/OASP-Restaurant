@@ -4,6 +4,7 @@ import javax.inject.Named;
 
 import io.oasp.gastronomy.restaurant.general.dataaccess.base.dao.ApplicationMasterDataDaoImpl;
 import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderPositionState;
+import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.ProductOrderState;
 import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.OrderPositionEntity;
 import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.dao.OrderPositionDao;
 
@@ -26,6 +27,14 @@ public class OrderPositionDaoImpl extends ApplicationMasterDataDaoImpl<OrderPosi
 
     OrderPositionEntity orderPositionEntity = findOne(id);
     orderPositionEntity.setState(orderState);
+    return save(orderPositionEntity);
+  }
+
+  @Override
+  public OrderPositionEntity setOrderedDrinkStatus(Long id, ProductOrderState orderState) {
+
+    OrderPositionEntity orderPositionEntity = findOne(id);
+    orderPositionEntity.setDrinkState(orderState);
     return save(orderPositionEntity);
   }
 

@@ -9,17 +9,6 @@ import io.oasp.module.jpa.dataaccess.api.MasterDataDao;
 
 public interface OrderDao extends ApplicationDao<OrderEntity>, MasterDataDao<OrderEntity> {
 
-  /**
-   * @param tableId
-   * @param orderState
-   * @return
-   */
   List<OrderEntity> findOrderByTableAndOrderState(Long tableId, OrderState orderState);
-
-  /**
-   * @param entity
-   * @return
-   */
-  OrderEntity createOrder(OrderEntity entity);
 
 }
