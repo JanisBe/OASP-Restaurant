@@ -87,6 +87,8 @@ public abstract class PermissionConstants {
 
   public static final String PREPARE_ORDER = "PrepareOrder";
 
+  public static final String PREPARE_DRINK = "PrepareDrink";
+
   public static final String DELIVER_ORDER = "DeliverOrder";
   // END ARCHETYPE SKIP
 }

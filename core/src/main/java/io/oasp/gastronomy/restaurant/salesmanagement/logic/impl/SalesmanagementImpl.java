@@ -152,7 +152,7 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
   private OrderPositionEto setOrderPositionStatus(Long id, OrderPositionState orderState) {
 
     OrderPositionEto foundPosition = getBeanMapper().map(getOrderPositionDao().find(id), OrderPositionEto.class);
-    if (orderState.isOneAfter(foundPosition.getState())) {
+    if (foundPosition.getState() != null && foundPosition.getState().isOneAfter(orderState)) {
       return getBeanMapper().map(getOrderPositionDao().setOrderPositionStatus(id, orderState), OrderPositionEto.class);
     } else {
       throw new IllegalStateException("Wrong order state!");
@@ -170,7 +170,7 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.PREPARE_ORDER)
+  @RolesAllowed(PermissionConstants.PREPARE_DRINK)
   public OrderPositionEto setDrinkStatusToDelivered(Long id) {
 
     return setDrinkStatus(id, ProductOrderState.DELIVERED);
@@ -179,7 +179,7 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
   private OrderPositionEto setDrinkStatus(Long id, ProductOrderState orderState) {
 
     OrderPositionEto foundPosition = getBeanMapper().map(getOrderPositionDao().find(id), OrderPositionEto.class);
-    if (orderState.isOneAfter(foundPosition.getDrinkState())) {
+    if (foundPosition.getDrinkState() != null && foundPosition.getDrinkState().isOneAfter(orderState)) {
       return getBeanMapper().map(getOrderPositionDao().setOrderedDrinkStatus(id, orderState), OrderPositionEto.class);
     } else {
       throw new IllegalStateException("Wrong order state!");
@@ -187,7 +187,7 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
   }
 
   @Override
-  @RolesAllowed(PermissionConstants.PREPARE_ORDER)
+  @RolesAllowed(PermissionConstants.PREPARE_DRINK)
   public OrderPositionEto setDrinkStatusToPrepared(Long id) {
 
     return setDrinkStatus(id, ProductOrderState.PREPARED);

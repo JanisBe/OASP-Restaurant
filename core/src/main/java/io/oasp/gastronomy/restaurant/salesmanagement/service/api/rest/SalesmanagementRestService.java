@@ -40,12 +40,19 @@ public interface SalesmanagementRestService {
 
   @POST
   @Path("/order/deliver/")
-  OrderPositionEto deliverOrderPosition(@PathParam("tableId") Long tableId);
+  OrderPositionEto deliverOrderPosition(Long tableId);
 
   @POST
   @Path("/order/prepare/")
-  OrderPositionEto prepareOrderPosition(@PathParam("tableId") Long tableId);
+  OrderPositionEto prepareOrderPosition(Long tableId);
 
+  @POST
+  @Path("/drink/prepare/")
+  OrderPositionEto setDrinkStatusToPrepared(Long id);
+
+  @POST
+  @Path("/drink/deliver/")
+  OrderPositionEto setDrinkStatusToDelivered(Long id);
   /**
    * @param order
    * @return
