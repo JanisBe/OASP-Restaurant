@@ -21,9 +21,12 @@ import io.oasp.gastronomy.restaurant.general.common.api.datatype.Money;
 import io.oasp.gastronomy.restaurant.general.logic.base.AbstractComponentFacade;
 import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.OfferEntity;
 import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.dao.OfferDao;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.exceptions.BillNotValidException;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.exceptions.OrderNotValidException;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.exceptions.PaymentNotValidException;
 import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderPositionState;
-import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.ProductOrderState;
 import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderState;
+import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.ProductOrderState;
 import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.BillEntity;
 import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.OrderEntity;
 import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.OrderPositionEntity;
@@ -113,10 +116,10 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
   private void validateOrderPosition(OrderPositionEntity entity) {
 
     if (entity.getOfferId() == null) {
-      throw new IllegalStateException("Offer id cannot be null!");
+      throw new OrderNotValidException("Offer id cannot be null!");
     }
     if (entity.getPrice() == null || entity.getPrice().getValue().intValue() < 0) {
-      throw new IllegalStateException("Offer position price cannot be negative!");
+      throw new OrderNotValidException("Offer position price cannot be negative!");
     }
   }
 
@@ -211,11 +214,17 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
   @RolesAllowed(PermissionConstants.SAVE_BILL)
   public BillEto createBill(List<Long> orderPositionIds) {
 
+    if (orderPositionIds.size() == 0) {
+      throw new BillNotValidException("Bill must contain at least one position!");
+    }
     if (!this.orderPositionDao.findOrderPositionIdsWhichContainAtLeastOnePositionId(orderPositionIds).isEmpty()) {
-      throw new IllegalArgumentException("A least one order Position is already on another bill");
+      throw new BillNotValidException("A least one order Position is already on another bill");
     }
     BillEntity bill = new BillEntity();
     List<OrderPositionEntity> orderPositions = this.orderPositionDao.findAllByIds(orderPositionIds);
+    if (orderPositionIds.size() != orderPositions.size()) {
+      throw new BillNotValidException("At least one given order position id does not exist!");
+    }
     bill.setOrderPositions(orderPositions);
     Money money = new Money(
         orderPositions.stream().map(op -> op.getPrice().getValue()).reduce(BigDecimal.ZERO, (a, b) -> a.add(b)));
@@ -264,13 +273,16 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
   private void validateBillPayment(Money toPay, Money tip, BillEntity bill) {
 
     if (bill == null) {
-      throw new IllegalArgumentException("Bill with given id does not exist!");
+      throw new PaymentNotValidException("Bill with given id does not exist!");
+    }
+    if (bill.isPayed()) {
+      throw new PaymentNotValidException("Bill is already paid!");
     }
     if (toPay == null || toPay.compareTo(bill.getTotal()) < 0) {
-      throw new IllegalArgumentException("Payment amount cannot be less than total of bill");
+      throw new PaymentNotValidException("Payment amount cannot be less than total of bill");
     }
     if (tip == null || BigDecimal.ZERO.compareTo(tip.getValue()) > 0) {
-      throw new IllegalArgumentException("Tip cannot be negative!");
+      throw new PaymentNotValidException("Tip cannot be negative!");
     }
   }
 
