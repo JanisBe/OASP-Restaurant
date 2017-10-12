@@ -1,5 +1,7 @@
 package io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.dao;
 
+import java.util.List;
+
 import io.oasp.gastronomy.restaurant.general.dataaccess.api.dao.ApplicationDao;
 import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderPositionState;
 import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.ProductOrderState;
@@ -11,5 +13,9 @@ public interface OrderPositionDao extends ApplicationDao<OrderPositionEntity>, M
   OrderPositionEntity setOrderPositionStatus(Long id, OrderPositionState orderState);
 
   OrderPositionEntity setOrderedDrinkStatus(Long id, ProductOrderState orderState);
+
+  List<Long> findOrderPositionIdsWhichContainAtLeastOnePositionId(List<Long> positionIds);
+
+  List<OrderPositionEntity> findAllByIds(List<Long> orderPosition);
 
 }

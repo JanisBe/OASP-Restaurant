@@ -1,7 +1,10 @@
 package io.oasp.gastronomy.restaurant.salesmanagement.logic.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.security.RolesAllowed;
@@ -11,17 +14,24 @@ import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.google.common.collect.Sets;
+
 import io.oasp.gastronomy.restaurant.general.common.api.constants.PermissionConstants;
+import io.oasp.gastronomy.restaurant.general.common.api.datatype.Money;
 import io.oasp.gastronomy.restaurant.general.logic.base.AbstractComponentFacade;
 import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.OfferEntity;
 import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.dao.OfferDao;
 import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderPositionState;
 import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.ProductOrderState;
+import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderState;
+import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.BillEntity;
 import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.OrderEntity;
 import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.OrderPositionEntity;
+import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.dao.BillDao;
 import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.dao.OrderDao;
 import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.dao.OrderPositionDao;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.Salesmanagement;
+import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.BillEto;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderCto;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderEto;
 import io.oasp.gastronomy.restaurant.salesmanagement.logic.api.to.OrderPositionEto;
@@ -43,6 +53,9 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
 
   @Inject
   private OfferDao offerDao;
+
+  @Inject
+  private BillDao billDao;
 
   @Inject
   private OrderPositionDao orderPositionDao;
@@ -191,5 +204,94 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
   public OrderPositionEto setDrinkStatusToPrepared(Long id) {
 
     return setDrinkStatus(id, ProductOrderState.PREPARED);
+  }
+
+  @Override
+  @Transactional
+  @RolesAllowed(PermissionConstants.SAVE_BILL)
+  public BillEto createBill(List<Long> orderPositionIds) {
+
+    if (!this.orderPositionDao.findOrderPositionIdsWhichContainAtLeastOnePositionId(orderPositionIds).isEmpty()) {
+      throw new IllegalArgumentException("A least one order Position is already on another bill");
+    }
+    BillEntity bill = new BillEntity();
+    List<OrderPositionEntity> orderPositions = this.orderPositionDao.findAllByIds(orderPositionIds);
+    bill.setOrderPositions(orderPositions);
+    Money money = new Money(
+        orderPositions.stream().map(op -> op.getPrice().getValue()).reduce(BigDecimal.ZERO, (a, b) -> a.add(b)));
+    bill.setTotal(money);
+    return getBeanMapper().map(this.billDao.save(bill), BillEto.class);
+  }
+
+  @Override
+  @Transactional
+  @RolesAllowed(PermissionConstants.SAVE_BILL)
+  public Money payBill(Long billId, Money toPay, Money tip) {
+
+    BillEntity bill = this.billDao.find(billId);
+    validateBillPayment(toPay, tip, bill);
+    Money rest = new Money(toPay.getValue().subtract(bill.getTotal().getValue()));
+    bill.setPayed(true);
+    bill.setTip(tip);
+    updateOrderStateOfRelatedOrders(bill);
+    return rest;
+  }
+
+  /**
+   * @param bill
+   */
+  private void updateOrderStateOfRelatedOrders(BillEntity bill) {
+
+    bill.getOrderPositions().forEach(op -> op.setState(OrderPositionState.PAYED));
+    Map<OrderEntity, Set<OrderPositionState>> collect = bill.getOrderPositions().stream()
+        .collect(Collectors.toMap(op -> op.getOrder(), op -> Sets.newHashSet(op.getState()), (s1, s2) -> {
+          s1.addAll(s2);
+          return s2;
+        }));
+    for (OrderEntity o : collect.keySet()) {
+      Set<OrderPositionState> ops = collect.get(o);
+      if (ops.size() == 1 && ops.contains(OrderPositionState.PAYED)) {
+        o.setState(OrderState.CLOSED);
+      }
+    }
+  }
+
+  /**
+   * @param toPay
+   * @param tip
+   * @param bill
+   */
+  private void validateBillPayment(Money toPay, Money tip, BillEntity bill) {
+
+    if (bill == null) {
+      throw new IllegalArgumentException("Bill with given id does not exist!");
+    }
+    if (toPay == null || toPay.compareTo(bill.getTotal()) < 0) {
+      throw new IllegalArgumentException("Payment amount cannot be less than total of bill");
+    }
+    if (tip == null || BigDecimal.ZERO.compareTo(tip.getValue()) > 0) {
+      throw new IllegalArgumentException("Tip cannot be negative!");
+    }
+  }
+
+  @Override
+  @RolesAllowed(PermissionConstants.FIND_BILL)
+  public BillEto findBillById(Long billId) {
+
+    return getBeanMapper().map(this.billDao.find(billId), BillEto.class);
+  }
+
+  @Override
+  @RolesAllowed(PermissionConstants.FIND_ORDER)
+  public List<OrderEto> findAllOrders() {
+
+    return getBeanMapper().mapList(this.orderDao.findAll(), OrderEto.class);
+  }
+
+  @Override
+  @RolesAllowed(PermissionConstants.FIND_BILL)
+  public List<BillEto> findAllBills() {
+
+    return getBeanMapper().mapList(this.billDao.findAll(), BillEto.class);
   }
 }
