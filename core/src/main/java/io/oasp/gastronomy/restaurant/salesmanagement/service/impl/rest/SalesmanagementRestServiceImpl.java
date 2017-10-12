@@ -91,4 +91,16 @@ public class SalesmanagementRestServiceImpl implements SalesmanagementRestServic
     return this.salesmanagement.findAllBills();
   }
 
+  @Override
+  public OrderPositionEto setDrinkStatusToPrepared(Long id) {
+
+    return this.salesmanagement.setDrinkStatusToPrepared(id);
+  }
+
+  @Override
+  public OrderPositionEto setDrinkStatusToDelivered(Long id) {
+
+    return this.salesmanagement.setDrinkStatusToDelivered(id);
+  }
+
 }

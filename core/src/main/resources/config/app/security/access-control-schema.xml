@@ -39,6 +39,7 @@
       <permission id="FindBill"/>
       <permission id="DeleteBill"/>
       <permission id="DeleteOrder"/>
+      <permission id="PrepareDrink"/>
     </permissions>
   </group>
   <group id="Cook" type="role">
