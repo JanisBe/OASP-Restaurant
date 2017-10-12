@@ -29,6 +29,10 @@ public interface Salesmanagement {
 
   OrderPositionEto prepareOrderPosition(Long id);
 
+  OrderPositionEto setDrinkStatusToPrepared(Long id);
+
+  OrderPositionEto setDrinkStatusToDelivered(Long id);
+
   List<BillEto> findAllBills();
 
   BillEto findBillById(Long billId);

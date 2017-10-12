@@ -9,11 +9,13 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import io.oasp.gastronomy.restaurant.general.common.api.RestService;
 import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.OfferEto;
 import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.ProductEto;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.exceptions.OrderNotValidException;
 
 /**
  * @author DBIENIEK
@@ -43,11 +45,11 @@ public interface OffermanagementRestService extends RestService {
 
   @POST
   @Path("/offer/")
-  OfferEto saveOffer(OfferEto offer);
+  OfferEto saveOffer(OfferEto offer) throws OrderNotValidException;
 
   @POST
-  @Path("/offer/setAsSpecial/{name}")
-  OfferEto setAsSpecial(@PathParam("name") String name);
+  @Path("/offer/setAsSpecial/")
+  OfferEto setAsSpecial(@QueryParam("name") String name);
 
   @GET
   @Path("/offer/menu/{name}/")
@@ -59,5 +61,5 @@ public interface OffermanagementRestService extends RestService {
 
   @POST
   @Path("/offer/menu/")
-  void saveProduct(List<ProductEto> menuItems);
+  void saveProducts(List<ProductEto> menuItems);
 }

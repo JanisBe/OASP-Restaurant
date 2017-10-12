@@ -22,6 +22,7 @@ import io.oasp.gastronomy.restaurant.general.logic.base.AbstractComponentFacade;
 import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.OfferEntity;
 import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.dao.OfferDao;
 import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderPositionState;
+import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.ProductOrderState;
 import io.oasp.gastronomy.restaurant.salesmanagement.common.api.datatype.OrderState;
 import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.BillEntity;
 import io.oasp.gastronomy.restaurant.salesmanagement.dataaccess.api.OrderEntity;
@@ -51,7 +52,7 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
   private OrderDao orderDao;
 
   @Inject
-  private OfferDao offerDaoDao;
+  private OfferDao offerDao;
 
   @Inject
   private BillDao billDao;
@@ -92,16 +93,16 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
     for (OrderPositionEto eto : orderCto.getPositions()) {
       orderPositions.add(getBeanMapper().map(eto, OrderPositionEntity.class));
     }
-    OrderEntity orderEntityToReturn = this.orderDao.save(orderEntity);
+    OrderEntity orderEntityToReturn = getOrderDao().save(orderEntity);
     List<OrderPositionEntity> orderPositionsToReturn = new ArrayList<OrderPositionEntity>();
     List<String> offerNames = orderPositions.stream().map(op -> op.getOfferName()).collect(Collectors.toList());
-    List<OfferEntity> offerEntity = this.offerDaoDao.findOfferEntitiesGivenNames(offerNames);
+    List<OfferEntity> offerEntity = this.offerDao.findOfferEntitiesGivenNames(offerNames);
     for (OrderPositionEntity entity : orderPositions) {
       entity.setOrder(orderEntityToReturn);
       entity.setOrderId(orderEntityToReturn.getId());
       entity.setOfferId(findOfferByName(entity.getOfferName(), offerEntity));
       validateOrderPosition(entity);
-      orderPositionsToReturn.add(this.orderPositionDao.save(entity));
+      orderPositionsToReturn.add(getOrderPositionDao().save(entity));
     }
     return assembleOrderCto(orderEntityToReturn, orderPositionsToReturn);
   }
@@ -165,7 +166,7 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
 
     OrderPositionEto foundPosition = getBeanMapper().map(getOrderPositionDao().find(id), OrderPositionEto.class);
     if (orderState.isOneAfter(foundPosition.getState())) {
-      return getBeanMapper().map(this.orderPositionDao.setOrderPositionStatus(id, orderState), OrderPositionEto.class);
+      return getBeanMapper().map(getOrderPositionDao().setOrderPositionStatus(id, orderState), OrderPositionEto.class);
     } else {
       throw new IllegalStateException("Wrong order state!");
     }
@@ -179,6 +180,30 @@ public class SalesmanagementImpl extends AbstractComponentFacade implements Sale
   private OrderDao getOrderDao() {
 
     return this.orderDao;
+  }
+
+  @Override
+  @RolesAllowed(PermissionConstants.PREPARE_ORDER)
+  public OrderPositionEto setDrinkStatusToDelivered(Long id) {
+
+    return setDrinkStatus(id, ProductOrderState.DELIVERED);
+  }
+
+  private OrderPositionEto setDrinkStatus(Long id, ProductOrderState orderState) {
+
+    OrderPositionEto foundPosition = getBeanMapper().map(getOrderPositionDao().find(id), OrderPositionEto.class);
+    if (orderState.isOneAfter(foundPosition.getDrinkState())) {
+      return getBeanMapper().map(getOrderPositionDao().setOrderedDrinkStatus(id, orderState), OrderPositionEto.class);
+    } else {
+      throw new IllegalStateException("Wrong order state!");
+    }
+  }
+
+  @Override
+  @RolesAllowed(PermissionConstants.PREPARE_ORDER)
+  public OrderPositionEto setDrinkStatusToPrepared(Long id) {
+
+    return setDrinkStatus(id, ProductOrderState.PREPARED);
   }
 
   @Override

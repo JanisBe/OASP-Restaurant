@@ -4,6 +4,7 @@ import java.util.List;
 
 import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.OfferEto;
 import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.ProductEto;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.exceptions.OrderNotValidException;
 
 /**
  * @author DBIENIEK
@@ -20,8 +21,9 @@ public interface Offermanagement {
   /**
    * @param offer
    * @return
+   * @throws OrderNotValidException
    */
-  OfferEto saveOffer(OfferEto offer);
+  OfferEto saveOffer(OfferEto offer) throws OrderNotValidException;
 
   /**
    * @return
@@ -48,7 +50,7 @@ public interface Offermanagement {
    * @return
    * @return
    */
-  void saveProduct(List<ProductEto> product);
+  void saveProducts(List<ProductEto> product);
 
   /**
    * @return
